@@ -38,4 +38,4 @@ Route::get('/products', 'ProductController@get');
 Route::get('/product/{id}', 'ProductController@find');
 Route::post('/product', 'ProductController@post');
 Route::put('/product', 'ProductController@put');
-Route::delete('/product', 'ProductController@delete');
+Route::delete('/product/{id}', 'ProductController@delete');

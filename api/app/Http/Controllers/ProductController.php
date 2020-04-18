@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 use App\Product;
 
@@ -43,7 +44,7 @@ class ProductController extends Controller
     {
         $validated = Validator::make($req->all(), [
             'name' => 'required|max:191',
-            'price' => 'required|number',
+            'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             'cashier_id' => 'required|exists:cashiers,id'
         ]);
@@ -76,7 +77,7 @@ class ProductController extends Controller
         $validated = Validator::make($req->all(), [
             'id' => 'required|exists:products,id',
             'name' => 'required|max:191',
-            'price' => 'required|number',
+            'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             'cashier_id' => 'required|exists:cashiers,id'
         ]);
@@ -104,9 +105,11 @@ class ProductController extends Controller
         ]);
     }
 
-    public function delete(Request $req)
+    public function delete($id)
     {
-        $validated = Validator::make($req->all(), [
+        $validated = Validator::make([
+            'id' => $id
+        ], [
             'id' => 'required|exists:products,id'
         ]);
 
@@ -117,7 +120,7 @@ class ProductController extends Controller
         }
 
         try {
-            $product = Product::findOrFail($req->id);
+            $product = Product::findOrFail($id);
             $product->delete();
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 500);
